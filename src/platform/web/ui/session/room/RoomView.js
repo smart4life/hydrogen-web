@@ -29,10 +29,20 @@ export class RoomView extends TemplateView {
         super(vm);
         this._viewClassForTile = viewClassForTile;
         this._optionsPopup = null;
+        this._mouseUpHandle = undefined;
+        this._mouseMoveHandle = undefined
     }
 
     render(t, vm) {
         return t.main({className: "RoomView middle"}, [
+            t.div({className: "resizer"}, [
+                t.button({
+                    onMousedown: this._onMouseDownResizeListener.bind(this),
+                    className: {
+                        "button-resizer": true,
+                    },
+                }),
+            ]),
             t.div({className: "RoomHeader middle-header"}, [
                 t.a({className: "button-utility close-middle", href: vm.closeUrl, title: vm.i18n`Close room`}),
                 t.view(new AvatarView(vm, 32)),
@@ -69,6 +79,24 @@ export class RoomView extends TemplateView {
                     }),
             ])
         ]);
+    }
+
+    _onMouseDownResizeListener(e) {
+        this._mouseMoveHandle = this._onMouseMoveResizeListener.bind(this, e.originalTarget.parentNode.parentNode);
+        window.addEventListener('mousemove', this._mouseMoveHandle, false);
+        this._mouseUpHandle = this._onMouseUpResizeListener.bind(this);
+        window.addEventListener('mouseup', this._mouseUpHandle, false);
+    }
+
+    _onMouseUpResizeListener() {
+        window.removeEventListener('mousemove', this._mouseMoveHandle, false);
+        window.removeEventListener('mouseup', this._mouseUpHandle, false);
+    }
+
+    _onMouseMoveResizeListener(elem, e) {
+        e.stopPropagation();
+        const size = Math.min(Math.max((window.innerHeight - e.clientY), 150), window.innerHeight - 100) + 'px';
+        elem.style.height = size;
     }
     
     _toggleOptionsMenu(evt) {

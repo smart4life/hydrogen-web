@@ -56,6 +56,8 @@ export class LeftPanelView extends TemplateView {
     constructor(vm) {
         super(vm);
         this._createMenuPopup = null;
+        this._mouseUpHandle = undefined;
+        this._mouseMoveHandle = undefined
     }
 
     render(t, vm) {
@@ -71,6 +73,14 @@ export class LeftPanelView extends TemplateView {
             },
             tileVM => new RoomTileView(tileVM)
         ));
+        const resizerRow = t.div({className: "resizer"}, [
+            t.button({
+                onMousedown: this._onMouseDownResizeListener.bind(this),
+                className: {
+                    "button-resizer": true,
+                },
+            }),
+        ]);
         const utilitiesRow = t.div({className: "utilities"}, [
             t.a({className: "button-utility close-session", href: vm.closeUrl, "aria-label": vm.i18n`Back to account list`, title: vm.i18n`Back to account list`}),
             t.view(new FilterField({
@@ -105,9 +115,34 @@ export class LeftPanelView extends TemplateView {
         ]);
 
         return t.div({className: "LeftPanel"}, [
+            resizerRow,
             utilitiesRow,
             roomList
         ]);
+    }
+
+    _onMouseDownResizeListener(e) {
+        this._mouseMoveHandle = this._onMouseMoveResizeListener.bind(this, e.originalTarget.parentNode.parentNode);
+        window.addEventListener('mousemove', this._mouseMoveHandle, false);
+        this._mouseUpHandle = this._onMouseUpResizeListener.bind(this);
+        window.addEventListener('mouseup', this._mouseUpHandle, false);
+    }
+
+    _onMouseUpResizeListener() {
+        window.removeEventListener('mousemove', this._mouseMoveHandle, false);
+        window.removeEventListener('mouseup', this._mouseUpHandle, false);
+    }
+
+    _onMouseMoveResizeListener(elem, e) {
+        e.stopPropagation();
+        const size = Math.min(Math.max((window.innerHeight - e.clientY), 150), window.innerHeight - 100) + 'px';
+        elem.style.height = size;
+    }
+
+    _addResizerBehaviour(evt) {
+        console.dir(this);
+        this.addEventListener(evt.target, 'onmousemove', this._handleMousemoveResize);
+        this.addEventListener(evt.target, 'onmouseup', this._handleMouseupResize);
     }
 
     _toggleCreateMenu(evt) {
