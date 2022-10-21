@@ -16,7 +16,7 @@ limitations under the License.
 
 import {ViewModel} from "../../ViewModel";
 import {RoomDetailsViewModel} from "./RoomDetailsViewModel.js";
-import {MemberListViewModel} from "./MemberListViewModel.js";
+import {EnhancedMemberListViewModel} from "./EnhancedMemberListViewModel.js";
 import {MemberDetailsViewModel} from "./MemberDetailsViewModel.js";
 
 export class RightPanelViewModel extends ViewModel {
@@ -60,7 +60,7 @@ export class RightPanelViewModel extends ViewModel {
 
     _setupNavigation() {
         this._hookUpdaterToSegment("details", RoomDetailsViewModel, () => { return {room: this._room}; });
-        this._hookUpdaterToSegment("members", MemberListViewModel, () => this._getMemberListArguments());
+        this._hookUpdaterToSegment("members", EnhancedMemberListViewModel, () => this._getMemberListArguments());
         this._hookUpdaterToSegment("member", MemberDetailsViewModel, () => this._getMemberDetailsArguments(),
             () => {
                 // If we fail to create the member details panel, fallback to memberlist

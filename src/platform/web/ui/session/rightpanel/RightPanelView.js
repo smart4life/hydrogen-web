@@ -16,7 +16,7 @@ limitations under the License.
 
 import {TemplateView} from "../../general/TemplateView";
 import {RoomDetailsView} from "./RoomDetailsView.js";
-import {MemberListView} from "./MemberListView.js";
+import {EnhancedMemberListView} from "./EnhancedMemberListView.js";
 import {LoadingView} from "../../general/LoadingView.js";
 import {MemberDetailsView} from "./MemberDetailsView.js";
 
@@ -36,7 +36,7 @@ export class RightPanelView extends TemplateView {
             case "room-details":
                 return new RoomDetailsView(vm);
             case "member-list":
-                return new MemberListView(vm);
+                return new EnhancedMemberListView(vm);
             case "member-details":
                 return new MemberDetailsView(vm);
             default:

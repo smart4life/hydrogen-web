@@ -182,6 +182,21 @@ a.button-action {
     display: block;
 }
 
+.button-resizer {
+    background-color: rgba(0, 0, 0, .05);
+    border: none;
+    border-radius: 5px;
+    cursor: row-resize;
+    display: flex;
+    height: 10px;
+    width: 100%;
+}
+
+.button-resizer:hover {
+  background-color: rgba(0, 0, 0, .15);
+}
+
+
 .button-utility.grid {
     background-image: url('icons/enable-grid.svg?primary=icon-color');
 }
@@ -196,6 +211,10 @@ a.button-action {
 
 .button-utility.grid.on {
     background-image: url('icons/disable-grid.svg?primary=icon-color');
+}
+
+.MemberAdd {
+    margin: 10px;
 }
 
 .FilterField {
@@ -300,7 +319,13 @@ a.button-action {
     min-width: 48px;
 }
 
-.LeftPanel {
+.RoomView .RoomView_body {
+    padding: 0;
+    /* make scrollbar hit right edge of parent */
+    margin-right: -8px;
+}
+
+.LeftPanel, .RoomView {
     background: var(--background-color-secondary);
     font-size: 1.5rem;
     padding: 12px 8px 0 8px;
